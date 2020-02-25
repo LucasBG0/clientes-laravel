@@ -9,7 +9,7 @@ A aplicação foi conteinerizada a partir de containers do Docker. Serão criado
 * *Nginx* ou gerenciador-clientes-nginx (Servidor web)
 * *PHP-FPM* ou gerenciador-clientes-app (aplicação com PHP-FPM 7.4 - *FastCGI Process Manager* )
 	O composer já vem instalado no container acima. Para conseguirmos utilizar o Laravel e PHPunit para realizar a suíte de testes.
-* *MySql* ou gerenciador-clientes-mysql (servidor de banco de dados MySql) - As tabelas do banco de dados são criadas automaticamente com as migrations, porém se necessitar, tem um dump.sql no diretório `mysql/dump.sql`.
+* *MySql* ou gerenciador-clientes-mysql (servidor de banco de dados MySql) - As tabelas do banco de dados são criadas automaticamente com as migrations, mas caso necessário existe um dump.sql no diretório `mysql/dump.sql`.
 
 
 ## Estrutura de diretórios

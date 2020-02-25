@@ -1,0 +1,11 @@
+.tag{
+	font-size: 1.18rem;
+	border: 1px solid #0073bb;
+	text-shadow: 0 1px 0 rgba(0, 51, 83, 0.3);
+}
+thead .glyphicon{
+    margin-right: .5rem;	
+}
+.navbar-nav li.nav-item.active > .nav-link{
+	color: $white;
+}

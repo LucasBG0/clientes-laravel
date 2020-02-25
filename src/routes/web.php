@@ -12,5 +12,21 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('clientes');
 });
+
+/*
+ * Rotas de view
+ */
+Route::get('/admin', 'ClienteController@clienteView')->name('admin.cliente.listView');
+Route::get('/admin/cliente', 'ClienteController@clienteView')->name('admin.cliente.listView');
+Route::get('/admin/cliente/register', 'ClienteController@clienteRegisterView')->name('admin.cliente.registerView');
+Route::post('/admin/cliente/register/{id}', 'ClienteController@clienteRegisterView')->name('admin.cliente.alteraView');
+
+/*
+ * Rotas da API
+ * CRUD de cliente
+ */
+Route::post('/admin/cliente/register', 'ClienteController@clienteCreate')->name('admin.cliente.register');
+Route::put('/admin/cliente/alterar/{id}', 'ClienteController@clienteUpdate')->name('admin.cliente.alterar');
+Route::delete('/admin/cliente/delete/{id}', 'ClienteController@clienteDelete')->name('admin.cliente.delete');
