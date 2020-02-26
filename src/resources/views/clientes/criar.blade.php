@@ -12,14 +12,14 @@
                 <div class="form-group row">    
                     <label for="name" class="col-sm-3 col-form-label">Nome do cliente</label>
                     <div class="col-sm-9">
-                    	<input type="text" class="form-control form-control-lg" name="cliente_name" 
+                    	<input type="text" class="form-control form-control-lg" name="name" 
                     	id="cliente_name" placeholder="João da Silva" value="{{ $cliente->name ?? '' }}">
                 	</div>
                 </div>
                 <div class="form-group row">    
                     <label for="name" class="col-sm-3 col-form-label">E-mail do cliente</label>
                     <div class="col-sm-9">
-                    	<input type="text" class="form-control form-control-lg" name="cliente_email" 
+                    	<input type="text" class="form-control form-control-lg" name="email" 
                     	id="cliente_email" placeholder="joao_silva@gmail.com" value="{{ $cliente->email ?? '' }}">
                     </div>	
                 </div>  

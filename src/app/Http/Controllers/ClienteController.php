@@ -14,22 +14,24 @@ class ClienteController extends Controller
 		$this->tags = Cliente::existingTags()->pluck('name');
 	}
 
-    public function clienteView(Request $request)
+    public function clientView(Request $request)
     {
-    	$clientes = Cliente::all();
+    	$clientes = $this->index(); // método GET da API
     	$msg = $this->session_flash($request);
  	
     	return view('clientes.lista', compact('clientes', 'msg'));
     }
 
-    public function clienteRegisterView(Request $request)
+    // Método utilizado para retornar a view no registro e na alteração de um cliente
+    public function clientRegisterView(Request $request)
     {
     	$variables = array();
     	$tags = $this->tags;
     	$msg = $this->session_flash($request);
 
+    	// se id == true então altera o cliente
     	if ($request->id) {
-	        $cliente = Cliente::find($request->id);
+	        $cliente = $this->show($request); // método GET da API
 	        $cliente_tags = implode(',', $cliente->tagNames());
 	        $method = 'PUT';
 	        $variables['cliente_tags'] = $cliente_tags;
@@ -45,23 +47,16 @@ class ClienteController extends Controller
     	return view('clientes.criar', $variables);
     }
 
-    public function clienteCreate(Request $request)
+    public function clientCreate(Request $request)
     {
+        $cliente = $this->store($request); // método POST da API
 
-        $cliente_exists = Cliente::where('email', $request->cliente_email)->first();
-
-        if(!$cliente_exists){
-            $cliente = Cliente::create([
-                'name' => $request->cliente_name,
-                'email' => $request->cliente_email,
-            ]);
-            $cliente->tag(explode(',', $request->tags));
-
+        if($cliente->status() == 201){
             $msg_type = 'msg_valid';
-            $msg = "O cliente ($cliente->email) foi adicionado com sucesso!";
+            $msg = "O cliente ($request->email) foi adicionado com sucesso!";
         }else{
             $msg_type = 'msg_error';
-            $msg = "O cliente ($cliente_exists->email) já existe no sistema!";
+            $msg = "O cliente ($request->email) já existe no sistema!";
         }
 
         $request->session()->flash($msg_type, $msg);
@@ -69,20 +64,10 @@ class ClienteController extends Controller
         return redirect()->route('admin.cliente.listView');
     }
 
-    public function clienteUpdate(Request $request)
+    public function clientUpdate(Request $request)
     {
-    	$cliente = Cliente::find($request->id);
-    	$cliente->name = $request->cliente_name;
-    	$cliente->email = $request->cliente_email;
-    	$cliente->save();
-    	// verifica se o cliente tem tags
-    	if ($request->tags) {
-    		//Deleta as tags atuais e salva as novas tags
-    		$cliente->retag(explode(',', $request->tags));
-    	}else{
-    		// se estiver vazio, remove todas as tags do cliente
-    		$cliente->untag();
-    	}
+    	$cliente = $this->show($request); // método GET da API
+    	$this->update($request, $cliente); // método PUT da API
 
         $msg_type = 'msg_valid';
         $msg = "O cliente ($cliente->email) foi alterado com sucesso!";        
@@ -91,13 +76,14 @@ class ClienteController extends Controller
         return redirect()->route('admin.cliente.listView');
     }
 
-    public function clienteDelete(Request $request)
+    public function clientDelete(Request $request)
     {
-        $cliente = Cliente::find($request->id);
-
+        $cliente = $this->show($request); // método GET da API
+        $this->delete($cliente); // método DELETE da API
+        
         $email = $cliente->email;
         $msg = 'Usuário ('. $email .') removido com sucesso!';
-        Cliente::destroy($request->id);
+        
         $request->session()->flash('msg_error', $msg); 
         return redirect()->route('admin.cliente.listView');
     }
@@ -117,24 +103,41 @@ class ClienteController extends Controller
         return $msg;
     }
 
-    /*
-     * API
-     */
+
+	/*
+	|--------------------------------------------------------------------------
+	| API Methods
+	|--------------------------------------------------------------------------
+	|
+	*/
     public function index()
     {
+    	// All clientes
     	$cliente = Cliente::with('tagged')->get(); // eager load
         return $cliente;
     }
 
-    public function show(Cliente $cliente)
+    public function show(Request $request)
     {
+    	// specific cliente
+    	$cliente = Cliente::find($request->id);
         return $cliente->with('tagged')->find($cliente->id); // eager load
     }
 
     public function store(Request $request)
-    {
+    {	
+    	// retorna o status 409 caso o e-mail já esteja cadastrado no sistema
+    	$cliente_exists = Cliente::where('email', $request->email)->first();
+    	if ($cliente_exists) {
+    		return response()->json(['success' => false], 409);
+    	}
+
         $cliente = Cliente::create($request->all());
-        $cliente->tag(explode(',', $request->tags));
+    	// verifica se tem tags na requisição
+    	if ($request->tags) {
+    		//Associa as novas tags ao modelo cliente
+    		$cliente->tag(explode(',', $request->tags));
+    	}        
         $cliente = $cliente->with('tagged')->find($cliente->id);
 
         return response()->json($cliente, 201);
@@ -147,7 +150,11 @@ class ClienteController extends Controller
     	if ($request->tags) {
     		//Deleta as tags atuais e salva as novas tags
     		$cliente->retag(explode(',', $request->tags));
+    	}else{
+    		// se estiver vazio, remove todas as tags do cliente
+    		$cliente->untag();
     	}
+
         $cliente = $cliente->with('tagged')->find($cliente->id);
 
         return response()->json($cliente, 200);

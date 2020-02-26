@@ -18,10 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('register', 'Auth\RegisterController@register');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout');
 
- 
-Route::get('clientes', 'ClienteController@index');
-Route::get('clientes/{cliente}', 'ClienteController@show');
-Route::post('clientes', 'ClienteController@store');
-Route::put('clientes/{cliente}', 'ClienteController@update');
-Route::delete('clientes/{cliente}', 'ClienteController@delete');
+Route::group(['middleware' => 'auth:api'], function() { 
+	Route::get('clientes', 'ClienteController@index');
+	Route::get('clientes/{id}', 'ClienteController@show');
+	Route::post('clientes', 'ClienteController@store');
+	Route::put('clientes/{cliente}', 'ClienteController@update');
+	Route::delete('clientes/{cliente}', 'ClienteController@delete');
+});	
