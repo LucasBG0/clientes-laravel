@@ -25,11 +25,12 @@ Existem duas formas de se utilizar o token:
 | Registro de usuário | POST                 | api/register      | name, email, password, password_confirmation | api_token, id, name, email, created_at, updated_at |
 | Login de usuário    | POST                 | api/login         | email, password                              | api_token, id, name, email, created_at, updated_at |
 | Logout de usuário   | POST                 | api/logout        |                                              | 'User logged out.'                                 |
-| Todos os clientes   | GET                  | api/clientes      |                                              | Objeto JSON com todos os clientes                  |
+| Todos os clientes   | GET                  | api/clientes      |                                              | Objetos JSON com todos os clientes                 |
 | Cliente específico  | GET                  | api/clientes/{id} |                                              | id, name, email, tagged: {}                        |
 | Novo cliente        | POST                 | api/clientes      | name, email, tags                            | id, name, email, tagged: {}                        |
 | Atualizar cliente   | PUT                  | api/clientes/{id} | name, email or tags                          | id, name, email, tagged: {}                        |
 | Delete cliente      | DELETE               | api/clientes/{id} |                                              | null                                               |
+| Todas as Tags       | GET                  | api/tags          |                                              | Objetos JSON com todas as tags                     |
 
 ### Exemplo de uso
 
@@ -74,7 +75,42 @@ Existem duas formas de se utilizar o token:
 	    }
 	}
 
+#### Todas as tags
 
+	curl -X GET http://localhost/api/tags \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+
+
+#### Retorno:
+
+	[
+	    {
+	        "slug": "participantes-da-maratona",
+	        "name": "Participantes da Maratona",
+	        "count": 2
+	    },
+	    {
+	        "slug": "alexanne-buckridge",
+	        "name": "Alexanne Buckridge",
+	        "count": 2
+	    },
+	    {
+	        "slug": "amalia-fahey",
+	        "name": "Amalia Fahey",
+	        "count": 2
+	    }
+	]    
+
+#### Paramêtros
+
+Se o parâmetro `key` for informado, será retornado apenas o valor da chave desejada. Exemplo:
+	
+	curl -X GET http://localhost/api/tags?key=name \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+
+Valores possíveis para o parâmetro `key`: slug, name ou count.
 
 
 ## Aplicação

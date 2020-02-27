@@ -23,9 +23,10 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => 'auth:api'], function() { 
-	Route::get('clientes', 'ClienteController@index');
-	Route::get('clientes/{id}', 'ClienteController@show');
-	Route::post('clientes', 'ClienteController@store');
-	Route::put('clientes/{cliente}', 'ClienteController@update');
-	Route::delete('clientes/{cliente}', 'ClienteController@delete');
+	Route::get('clientes', 'APIController@getAllClientes');
+	Route::get('clientes/{id}', 'APIController@getCliente');
+	Route::get('tags', 'APIController@getAllTags');
+	Route::post('clientes', 'APIController@store');
+	Route::put('clientes/{cliente}', 'APIController@update');
+	Route::delete('clientes/{cliente}', 'APIController@delete');
 });	
