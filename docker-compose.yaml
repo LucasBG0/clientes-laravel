@@ -4,8 +4,8 @@ services:
   #PHP Service
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./php/Dockerfile
     image: gerenciador-clientes/php
     container_name: gerenciador-clientes-app
     restart: unless-stopped

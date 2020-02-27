@@ -4,7 +4,7 @@ Cada cliente possui nome e e-mail e deve ser possível marcá-lo em tags diversa
 
 ## REST API
 O sistema conta com uma API para realizar os CRUDS. 
-A API segue o protocolo Rest de comunicação, onde é possível realizar uma comunicação com o servidor para obter ou incluir os dados. 
+A API segue o protocolo Rest de comunicação, onde é possível realizar uma comunicação com o servidor para obter, incluir ou remover os dados do banco. 
 A API disponibiliza de endpoints para se registrar, login e logout. Além dos enpoints para realizar operações de CRUD de clientes.
 
 ### Autenticação
@@ -41,7 +41,7 @@ Existem duas formas de se utilizar o token:
 	 -H "Content-Type: application/json" \
 	 -d '{"name": "Paulo", "email": "paulo.dev@example.com", "password": "dev1234", "password_confirmation": "dev1234"}'
 
-#### Retorno:
+##### Retorno:
 
 	{
 	    "data": {
@@ -62,7 +62,7 @@ Existem duas formas de se utilizar o token:
 	  -d "{\"email\": \"paulo.dev@example.com\", \"password\": \"dev1234\" }"
 
 
-#### Retorno:
+##### Retorno:
 
 	{
 	    "data": {
@@ -82,7 +82,7 @@ Existem duas formas de se utilizar o token:
 	  -H "Content-type: application/json"
 
 
-#### Retorno:
+##### Retorno:
 
 	[
 	    {
@@ -102,7 +102,7 @@ Existem duas formas de se utilizar o token:
 	    }
 	]    
 
-#### Paramêtros
+##### Paramêtros
 
 Se o parâmetro `key` for informado, será retornado apenas o valor da chave desejada. Exemplo:
 	

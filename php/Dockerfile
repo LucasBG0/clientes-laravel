@@ -1,7 +1,7 @@
 FROM php:7.4.3-fpm
 
 # Copy composer.lock and composer.json
-COPY src/composer.lock src/composer.json /var/www/
+#COPY src/composer.lock src/composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
@@ -22,6 +22,10 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
+# Install NodeJS
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update && apt-get install -y nodejs
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -39,6 +43,10 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory contents
 COPY /src /var/www
+
+# Install dependencies
+# RUN npm install
+# RUN composer install
 
 # Copy existing application directory permissions
 COPY --chown=www:www /src /var/www
