@@ -2,6 +2,81 @@
 Aplicação para gerenciar dados coletados de clientes. Construída na linguagem PHP utilizando o Framework laravel, servidor web Nginx e SGBD MySQL.
 Cada cliente possui nome e e-mail e deve ser possível marcá-lo em tags diversas. Aplicação para cadastrar, listar, alterar e remover um cliente.
 
+## REST API
+O sistema conta com uma API para realizar os CRUDS. 
+A API segue o protocolo Rest de comunicação, onde é possível realizar uma comunicação com o servidor para obter ou incluir os dados. 
+A API disponibiliza de endpoints para se registrar, login e logout. Além dos enpoints para realizar operações de CRUD de clientes.
+
+### Autenticação
+A autenticação da API é feita com base no modelo oAuth2, através do uso de um token gerado para usuários logados.
+Então para conseguir o token, é necessário se registrar. É possível se registrar utilizando a própria API, enviando uma requisição do tipo POST. Mais detalhes na seção 'Endpoints'.
+
+Existem duas formas de se utilizar o token: 
+
+1. A primeira alternativa é incluir o token no Header da requisição, como uma autenticação do tipo Bearer Token. Por exemplo:
+	Authorization Bearer <chave-da-api>
+
+2. A segunda alternativa é enviar o token em uma solicitação no corpo da requisição com o atributo `api_token`.
+
+### API Endpoints
+
+| Ação                | Método de requisição | Endpoint          | Request Body                                 | Retorno                                            |
+|---------------------|----------------------|-------------------|----------------------------------------------|----------------------------------------------------|
+| Registro de usuário | POST                 | api/register      | name, email, password, password_confirmation | api_token, id, name, email, created_at, updated_at |
+| Login de usuário    | POST                 | api/login         | email, password                              | api_token, id, name, email, created_at, updated_at |
+| Logout de usuário   | POST                 | api/logout        |                                              | 'User logged out.'                                 |
+| Todos os clientes   | GET                  | api/clientes      |                                              | Objeto JSON com todos os clientes                  |
+| Cliente específico  | GET                  | api/clientes/{id} |                                              | id, name, email, tagged: {}                        |
+| Novo cliente        | POST                 | api/clientes      | name, email, tags                            | id, name, email, tagged: {}                        |
+| Atualizar cliente   | PUT                  | api/clientes/{id} | name, email or tags                          | id, name, email, tagged: {}                        |
+| Delete cliente      | DELETE               | api/clientes/{id} |                                              | null                                               |
+
+### Exemplo de uso
+
+#### Registro de usuário
+
+	curl -X POST http://localhost/api/register \
+	 -H "Accept: application/json" \
+	 -H "Content-Type: application/json" \
+	 -d '{"name": "Paulo", "email": "paulo.dev@example.com", "password": "dev1234", "password_confirmation": "dev1234"}'
+
+#### Retorno:
+
+	{
+	    "data": {
+	        "api_token":"0syHnl0Y9jOIfszq11EC2CBQwCfObmvscrZYo5o2ilZPnohvndH797nDNyAT",
+	        "created_at": "2020-02-20 21:17:15",
+	        "email": "paulo.dev@example.com",
+	        "id": 51,
+	        "name": "Paulo",
+	        "updated_at": "2020-02-20 21:17:15"
+	    }
+	}
+
+#### Login de usuário
+
+	curl -X POST http://localhost/api/login \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json" \
+	  -d "{\"email\": \"paulo.dev@example.com\", \"password\": \"dev1234\" }"
+
+
+#### Retorno:
+
+	{
+	    "data": {
+	        "id":1,
+	        "name":"Paulo",
+	        "email":"paulo.dev@example.com",
+	        "created_at":"2020-02-20 21:17:15",
+	        "updated_at":"2020-02-20 21:17:15",
+	        "api_token":"Jll7q0BSijLOrzaOSm5Dr5hW9cJRZAJKOzvDlxjKCXepwAeZ7JR6YP5zQqnw"
+	    }
+	}
+
+
+
+
 ## Aplicação
 
 A aplicação foi conteinerizada a partir de containers do Docker. Serão criados 3 containers:
