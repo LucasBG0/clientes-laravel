@@ -4,20 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cliente;
+use GuzzleHttp\Client as ApiRequest;
 
 class ClienteController extends Controller
 {
-	private $tags;
-
-	public function __construct()
-	{
-		$this->tags = Cliente::existingTags()->pluck('name');
-	}
 
     public function clientView(Request $request)
     {
-    	$clientes = $this->getAllClientes(); // método GET da API
-    	$msg = $this->session_flash($request);
+    	//$clientes = $this->getAllClientes(); // método GET da API
+    	try{
+	    	$api = new ApiRequest;
+	    	$response = $api->request('GET', Route('api.getAllClientes'), [
+	    		'headers' => [
+	    			'Accept' => 'application/json', 
+	    			'Content-Type' => 'application/json',
+	    			'Authorization' => 'Bearer '. \Auth::user()->api_token
+	    		],
+	    		'http_errors' => false
+	    	]);
+	    	$clientes = json_decode($response->getBody()->getContents());
+	    	$msg = $this->session_flash($request);    		
+    	}catch (RequestException $e){
+    		return redirect()->route('home');
+    	}
+
  	
     	return view('clientes.lista', compact('clientes', 'msg'));
     }

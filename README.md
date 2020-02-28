@@ -80,6 +80,7 @@ Existem duas formas de se utilizar o token:
 	curl -X GET http://localhost/api/tags \
 	  -H "Accept: application/json" \
 	  -H "Content-type: application/json"
+	  -H "Authorization: Bearer <api_token>"
 
 
 ##### Retorno:

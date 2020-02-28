@@ -25,8 +25,8 @@
                 <td scope="col"><div class="my-2">{{ $cliente->name }}</div></td>
                 <td scope="col"><div class="my-2">{{ $cliente->email }}</div></td>
                 <td scope="col">
-            	@foreach ($cliente->tagNames() as $tag)
-            		<div class="d-inline-block rounded p-1 my-1 bg-primary text-white tag">{{ $tag }}</div>
+            	@foreach ($cliente->tagged as $tag)
+            		<div class="d-inline-block rounded p-1 my-1 bg-primary text-white tag">{{ $tag->tag_name }}</div>
             	@endforeach
                 </td>
                 <td scope="col">{{ $cliente->created_at ? $cliente->created_at : '--' }}</td>

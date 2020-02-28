@@ -12,23 +12,27 @@
 */
 
 Route::get('/', function () {
-    return view('clientes');
-});
+    return view('home');
+})->name('home');
 
 /*
  * Rotas de view
  */
-// Retorna view que lista de todos os usuários
-Route::get('/admin', 'ClienteController@clientView')->name('admin.cliente.listView');
-Route::get('/admin/cliente', 'ClienteController@clientView')->name('admin.cliente.listView');
-// Retorna view de registro.
-Route::get('/admin/cliente/register', 'ClienteController@clientRegisterView')->name('admin.cliente.registerView');
-// Retorna view de alterar cliente. Dados do cliente passados por POST.
-Route::post('/admin/cliente/register/{id}', 'ClienteController@clientRegisterView')->name('admin.cliente.alteraView');
+Auth::routes();
+Route::group(['middleware' => 'auth'], function() { 
+	// Retorna view que lista de todos os usuários
+	Route::get('/admin', 'ClienteController@clientView')->name('admin.cliente.listView');
+	Route::get('/admin/cliente', 'ClienteController@clientView')->name('admin.cliente.listView');
+	// Retorna view de registro.
+	Route::get('/admin/cliente/register', 'ClienteController@clientRegisterView')->name('admin.cliente.registerView');
+	// Retorna view de alterar cliente. Dados do cliente passados por POST.
+	Route::post('/admin/cliente/register/{id}', 'ClienteController@clientRegisterView')->name('admin.cliente.alteraView');
 
-/*
- * Rotas que usam os métodos da API internamente
- */
-Route::post('/admin/cliente/register', 'ClienteController@clientCreate')->name('admin.cliente.register');
-Route::put('/admin/cliente/alterar/{id}', 'ClienteController@clientUpdate')->name('admin.cliente.alterar');
-Route::delete('/admin/cliente/delete/{id}', 'ClienteController@clientDelete')->name('admin.cliente.delete');
+	/*
+	 * Rotas que usam os métodos da API internamente
+	 */
+	Route::post('/admin/cliente/register', 'ClienteController@clientCreate')->name('admin.cliente.register');
+	Route::put('/admin/cliente/alterar/{id}', 'ClienteController@clientUpdate')->name('admin.cliente.alterar');
+	Route::delete('/admin/cliente/delete/{id}', 'ClienteController@clientDelete')->name('admin.cliente.delete');
+});	
+#Auth::routes();

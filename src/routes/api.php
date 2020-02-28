@@ -19,11 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('register', 'Auth\RegisterController@register');
-Route::post('login', 'Auth\LoginController@login');
+Route::post('login', 'Auth\LoginController@login')->name('api.login');
 Route::post('logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => 'auth:api'], function() { 
-	Route::get('clientes', 'APIController@getAllClientes');
+	Route::get('clientes', 'APIController@getAllClientes')->name('api.getAllClientes');
 	Route::get('clientes/{id}', 'APIController@getCliente');
 	Route::get('tags', 'APIController@getAllTags');
 	Route::post('clientes', 'APIController@store');
