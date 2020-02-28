@@ -19,12 +19,16 @@ class APIController extends Controller
 
 	public function __construct()
 	{
-		$this->clientes = Cliente::with('tagged')->get();
+		$this->clientes = Cliente::with('tagged');
 	}
 
-    public function getAllClientes()
+    public function getAllClientes(Request $request)
     {
-        return $this->clientes;
+        $offset = $request->query('offset') ? $request->query('offset') : 0;
+        $limit = $request->query('limit') ? $request->query('limit') : 50;
+        $clientes = $this->clientes->offset($offset)->limit($limit)->get();
+
+        return $clientes;
     }
 
     public function getCliente(Request $request)

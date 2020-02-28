@@ -138,6 +138,18 @@ Existem duas formas de se utilizar o token:
 	    }
 	] 
 
+##### Paramêtros
+
+É possível informar os parâmetros `offset` e/ou `limit`. Exemplo:
+	
+	curl -X GET http://localhost/api/clientes?offset=30&limit=50 \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+
+Valores padrão:
+`offset` = 0
+`limit` = 50
+
 #### Cliente específico
 
 	curl -X GET http://localhost/api/clientes/1 \
@@ -327,33 +339,21 @@ A aplicação foi conteinerizada a partir de containers do Docker. Serão criado
 				|
 				|-- dbdata (arquivos binários do mysql)
 				|-- dump.sql (Dump das tabelas com os dados)
+			|-- php (diretório imagem PHP)
+				|
+				|-- Dockerfile (Imagem docker personalizada do PHP)
+				|-- local.ini (configurações adicionais do PHP)
 			|-- docker-compose.yml (arquivo de configuração docker)
 			|-- nginx (diretório do servidor web nginx)
 			|-- README.md (documentação do teste)			
 			|-- src (arquivos do laravel e diretório da aplicação)
-				|
-				|-- public (diretório da aplicação)
-					|
-					|-- classes (as classes que são utilizadas)
-						|
-						|-- Database (classes responsáveis pela conexão e CRUDS)
-						|-- Game.php (Classe com dados das partidas)
-						|-- Parser.php (Classe principal responsável por percorrer o log)
-						|-- Player.php (Classe com o modelo do Player. Usado para um jogador ou uma arma
-					|-- static (diretório dos arquivos estáticos. Ex: css, scss, js, svg, gif)
-					|-- controller.php (controlador de ajax requests)
-					|-- loader_classes.php (carrega as classes)
-					|-- index.php (Arquivo principal index que chama todos os outros arquivos)
-				|-- test (Suíte de testes - PHPunit)
-				|-- phpunit.xml.dist (arquivo de configuração PHPunit)
-				|-- composer.json (Dependências do projeto)
-				|-- composer.lock (Dependências do projeto com as versões exatas)
-					
+			|-- run.sh (Bash script para criar infraestrutura)
 
 
 ## Pré-requisitos para o setup:
 * [Docker](https://www.docker.com/products/docker-desktop)
 * [Docker-compose](https://docs.docker.com/compose/install/)
+* **Apenas se estiver usando Windows:** Bash Shell[Cmder](https://cmder.net/) ou [Git Bash](https://gitforwindows.org/)
 
 
 ### Instalação
@@ -362,11 +362,11 @@ A aplicação foi conteinerizada a partir de containers do Docker. Serão criado
 2. Caso queira, altere as variáveis de ambiente no arquivo `src/.env`. É nesse arquivo que as credenciais do banco de dados e configurações do Laravel estão definidas. A aplicação utiliza as variáveis de ambiente para realizar todas as operações com o banco de dados.
 **Obs.:** O host para se conectar no banco é o nome do container do MySQL.
 
-3. Agora execute o bash script abaixo para rodar os comandos de configuração de um projeto Laravel e criação de todos os containers.
+3. Agora execute o bash script abaixo para rodar os comandos de criação de todos os containers, configuração de um projeto Laravel, migrations, dependências e etc. Para conseguir rodar o script é necessário ter um Bash Shell instalado. O terminal do linux já conta com essa funcionalidade. Agora se estiver usando Windows, é necessário instalar uma ferramenta como [Cmder](https://cmder.net/) ou [Git Bash](https://gitforwindows.org/).
 
 	`sh run.sh`
 
-**Obs.:** Caso algo de errado, você pode abrir o arquivo `run.sh` e executar os comandos individualmente no terminal.
+**Obs.:** Caso algo dê errado, você pode abrir o arquivo `run.sh` e executar os comandos individualmente no terminal.
 
 4. Acesse o url da aplicação: 
 

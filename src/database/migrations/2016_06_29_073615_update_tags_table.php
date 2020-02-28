@@ -18,9 +18,11 @@ class UpdateTagsTable extends Migration {
 
 	public function down()
 	{
-		Schema::table('tagging_tags', function ($table) {
-			$table->dropForeign('tagging_tags_tag_group_id_foreign');
-			$table->dropColumn('tag_group_id');
-		});
+		if (DB::getDriverName() !== 'sqlite') { // Keep just this // https://github.com/laravel/framework/issues/23461
+			Schema::table('tagging_tags', function ($table) {
+				$table->dropForeign('tagging_tags_tag_group_id_foreign');
+				$table->dropColumn('tag_group_id');
+			});
+		}	
 	}
 }
