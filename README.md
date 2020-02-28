@@ -29,10 +29,10 @@ Existem duas formas de se utilizar o token:
 | Cliente específico  | GET                  | api/clientes/{id} |                                              | id, name, email, tagged: {}                        |
 | Novo cliente        | POST                 | api/clientes      | name, email, tags                            | id, name, email, tagged: {}                        |
 | Atualizar cliente   | PUT                  | api/clientes/{id} | name, email or tags                          | id, name, email, tagged: {}                        |
-| Delete cliente      | DELETE               | api/clientes/{id} |                                              | null                                               |
+| Deletar cliente     | DELETE               | api/clientes/{id} |                                              | null                                               |
 | Todas as Tags       | GET                  | api/tags          |                                              | Objetos JSON com todas as tags                     |
 
-### Exemplo de uso
+### Exemplo de uso da API com a ferramenta de linha de comando cURL
 
 #### Registro de usuário
 
@@ -74,6 +74,202 @@ Existem duas formas de se utilizar o token:
 	        "api_token":"Jll7q0BSijLOrzaOSm5Dr5hW9cJRZAJKOzvDlxjKCXepwAeZ7JR6YP5zQqnw"
 	    }
 	}
+
+
+
+#### Todos os clientes
+
+	curl -X GET http://localhost/api/clientes \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+	  -H "Authorization: Bearer <api_token>"
+
+
+##### Retorno:
+
+	[
+	    {
+	        "id": 1,
+	        "name": "Jarrett Stoltenberg",
+	        "email": "clark.rice@example.net",
+	        "created_at": "2020-02-27 20:37:26",
+	        "updated_at": "2020-02-27 20:37:26",
+	        "tagged": [
+	            {
+	                "id": 101,
+	                "taggable_id": 1,
+	                "taggable_type": "App\\Cliente",
+	                "tag_name": "Joshua King",
+	                "tag_slug": "joshua-king",
+	                "tag": {
+	                    "id": 101,
+	                    "tag_group_id": null,
+	                    "slug": "joshua-king",
+	                    "name": "Joshua King",
+	                    "suggest": 0,
+	                    "count": 1
+	                }
+	            }
+	        ]
+	    },
+	    {
+	        "id": 2,
+	        "name": "Mr. Keagan Shields II",
+	        "email": "rosie.schimmel@example.net",
+	        "created_at": "2020-02-27 20:37:26",
+	        "updated_at": "2020-02-27 20:37:26",
+	        "tagged": [
+	            {
+	                "id": 102,
+	                "taggable_id": 2,
+	                "taggable_type": "App\\Cliente",
+	                "tag_name": "Jordan Balistreri",
+	                "tag_slug": "jordan-balistreri",
+	                "tag": {
+	                    "id": 102,
+	                    "tag_group_id": null,
+	                    "slug": "jordan-balistreri",
+	                    "name": "Jordan Balistreri",
+	                    "suggest": 0,
+	                    "count": 1
+	                }
+	            }
+	        ]
+	    }
+	] 
+
+#### Cliente específico
+
+	curl -X GET http://localhost/api/clientes/1 \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+	  -H "Authorization: Bearer <api_token>"
+
+
+##### Retorno:
+
+	{
+	    "id": 1,
+	    "name": "Jarrett Stoltenberg",
+	    "email": "clark.rice@example.net",
+	    "created_at": "2020-02-27 20:37:26",
+	    "updated_at": "2020-02-27 20:37:26",
+	    "tagged": [
+	        {
+	            "id": 101,
+	            "taggable_id": 1,
+	            "taggable_type": "App\\Cliente",
+	            "tag_name": "Joshua King",
+	            "tag_slug": "joshua-king",
+	            "tag": {
+	                "id": 101,
+	                "tag_group_id": null,
+	                "slug": "joshua-king",
+	                "name": "Joshua King",
+	                "suggest": 0,
+	                "count": 1
+	            }
+	        }
+	    ]
+	} 	       
+
+#### Novo cliente
+
+	curl -X POST http://localhost/api/clientes \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+	  -H "Authorization: Bearer <api_token>"
+	  -d '{"name": "Luiz Carlos", "email": "luizera@example.com", "tags": "tag1, tag2, tag3"}'
+
+
+##### Retorno:
+
+	{
+	    "id": 57,
+	    "name": "Luiz Carlos",
+	    "email": "luizera@example.com",
+	    "created_at": "2020-02-28 19:18:46",
+	    "updated_at": "2020-02-28 19:18:46",
+	    "tagged": [
+	        {
+	            "id": 160,
+	            "taggable_id": 57,
+	            "taggable_type": "App\\Cliente",
+	            "tag_name": "Tag1",
+	            "tag_slug": "tag1",
+	            "tag": {
+	                "id": 151,
+	                "tag_group_id": null,
+	                "slug": "tag1",
+	                "name": "Tag1",
+	                "suggest": 0,
+	                "count": 1
+	            }
+	        },
+	        {
+	            "id": 161,
+	            "taggable_id": 57,
+	            "taggable_type": "App\\Cliente",
+	            "tag_name": "Tag2",
+	            "tag_slug": "tag2",
+	            "tag": {
+	                "id": 152,
+	                "tag_group_id": null,
+	                "slug": "tag2",
+	                "name": "Tag2",
+	                "suggest": 0,
+	                "count": 1
+	            }
+	        },
+	        {
+	            "id": 162,
+	            "taggable_id": 57,
+	            "taggable_type": "App\\Cliente",
+	            "tag_name": "Tag3",
+	            "tag_slug": "tag3",
+	            "tag": {
+	                "id": 153,
+	                "tag_group_id": null,
+	                "slug": "tag3",
+	                "name": "Tag3",
+	                "suggest": 0,
+	                "count": 1
+	            }
+	        }
+	    ]
+	}	       
+
+#### Atualizar cliente
+
+	curl -X PUT http://localhost/api/clientes/1 \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+	  -H "Authorization: Bearer <api_token>"
+	  -d '{"name": "Stoltenberg Jarrett"}'
+
+
+##### Retorno:
+
+	{
+	    "id": 1,
+	    "name": "Stoltenberg Jarrett",
+	    "email": "clark.rice@example.net",
+	    "created_at": "2020-02-27 20:37:26",
+	    "updated_at": "2020-02-28 19:27:39",
+	    "tagged": []
+	}
+
+#### Deletar cliente
+
+	curl -X POST http://localhost/api/clientes/1 \
+	  -H "Accept: application/json" \
+	  -H "Content-type: application/json"
+	  -H "Authorization: Bearer <api_token>"
+
+
+##### Retorno:
+
+	null
 
 #### Todas as tags
 

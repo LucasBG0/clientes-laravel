@@ -11,38 +11,22 @@ class ClienteController extends Controller
 
     public function clientView(Request $request)
     {
-    	//$clientes = $this->getAllClientes(); // método GET da API
-    	try{
-	    	$api = new ApiRequest;
-	    	$response = $api->request('GET', Route('api.getAllClientes'), [
-	    		'headers' => [
-	    			'Accept' => 'application/json', 
-	    			'Content-Type' => 'application/json',
-	    			'Authorization' => 'Bearer '. \Auth::user()->api_token
-	    		],
-	    		'http_errors' => false
-	    	]);
-	    	$clientes = json_decode($response->getBody()->getContents());
-	    	$msg = $this->session_flash($request);    		
-    	}catch (RequestException $e){
-    		return redirect()->route('home');
-    	}
-
- 	
-    	return view('clientes.lista', compact('clientes', 'msg'));
+        $clientes = $this->apiRequest('GET', '/api/clientes'); // requisição GET para a API - api/clientes
+    	$msg = $this->session_flash($request);    		
+        return view('clientes.lista', compact('clientes', 'msg'));
     }
 
     // Método utilizado para retornar a view no registro e na alteração de um cliente
     public function clientRegisterView(Request $request)
     {
     	$variables = array();
-    	$tags = $this->tags;
     	$msg = $this->session_flash($request);
 
     	// se id == true então altera o cliente
     	if ($request->id) {
-	        $cliente = $this->getCliente($request); // método GET da API
-	        $cliente_tags = implode(',', $cliente->tagNames());
+            $cliente = $this->apiRequest('GET', '/api/clientes/'.$request->id); // requisição GET para a API - api/clientes/{id}
+            $cliente_tags = collect($cliente->tagged)->pluck('tag_name')->toArray();
+	        $cliente_tags = implode(',', $cliente_tags);
 	        $method = 'PUT';
 	        $variables['cliente_tags'] = $cliente_tags;
 	        $variables['cliente'] = $cliente;
@@ -50,6 +34,7 @@ class ClienteController extends Controller
 	    	$method = 'POST';
     	}
 
+        $tags = $this->apiRequest('GET', '/api/tags?key=name'); // requisição GET para a API - api/tags
     	$variables['tags'] = $tags;
     	$variables['method'] = $method;
     	$variables['msg'] = $msg;
@@ -59,9 +44,9 @@ class ClienteController extends Controller
 
     public function clientCreate(Request $request)
     {
-        $cliente = $this->store($request); // método POST da API
+        $cliente = $this->apiRequest('POST', '/api/clientes', $request->all()); // método POST da API
 
-        if($cliente->status() == 201){
+        if(!isset($cliente->success)){
             $msg_type = 'msg_valid';
             $msg = "O cliente ($request->email) foi adicionado com sucesso!";
         }else{
@@ -76,8 +61,8 @@ class ClienteController extends Controller
 
     public function clientUpdate(Request $request)
     {
-    	$cliente = $this->getCliente($request); // método GET da API
-    	$this->update($request, $cliente); // método PUT da API
+    	$cliente = $this->apiRequest('GET', '/api/clientes/'.$request->id); // método GET da API
+    	$this->apiRequest('PUT', '/api/clientes/'.$request->id, $request->all()); // método PUT da API
 
         $msg_type = 'msg_valid';
         $msg = "O cliente ($cliente->email) foi alterado com sucesso!";        
@@ -88,11 +73,11 @@ class ClienteController extends Controller
 
     public function clientDelete(Request $request)
     {
-        $cliente = $this->getCliente($request); // método GET da API
-        $this->delete($cliente); // método DELETE da API
+        $cliente = $this->apiRequest('GET', '/api/clientes/'.$request->id); // método GET da API
+        $this->apiRequest('DELETE', '/api/clientes/'.$request->id); // método DELETE da API
         
         $email = $cliente->email;
-        $msg = 'Usuário ('. $email .') removido com sucesso!';
+        $msg = 'O cliente ('. $email .') removido com sucesso!';
         
         $request->session()->flash('msg_error', $msg); 
         return redirect()->route('admin.cliente.listView');
@@ -111,5 +96,34 @@ class ClienteController extends Controller
             $msg = '';
         }
         return $msg;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Métodos que consomem a API
+    |--------------------------------------------------------------------------
+    |
+    */
+    private function apiRequest(string $method, string $endpoint, array $data = null)
+    {
+        $rootUrl = 'http://gerenciador-clientes-nginx';
+        $api = new ApiRequest(['base_uri' => $rootUrl]);
+
+        $params = array(
+            'headers' => [
+                'Accept' => 'application/json', 
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '. \Auth::user()->api_token
+            ],
+            'http_errors' => false
+        );
+
+        if ($data) {
+            $params['json'] = $data;
+        }
+        
+        $response = $api->request($method, $endpoint, $params);
+        $cliente = json_decode($response->getBody()->getContents());
+        return $cliente;          
     }
 }

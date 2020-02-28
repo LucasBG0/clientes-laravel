@@ -75,7 +75,9 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $user->generateToken();
-
-        return response()->json(['data' => $user->toArray()], 201);
+        if($request->wantsJson()){
+            return response()->json(['data' => $user->toArray()], 201);
+        }
+        #return parent::registered($request, $user);
     }    
 }
