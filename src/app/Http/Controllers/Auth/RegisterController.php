@@ -78,6 +78,5 @@ class RegisterController extends Controller
         if($request->wantsJson()){
             return response()->json(['data' => $user->toArray()], 201);
         }
-        #return parent::registered($request, $user);
     }    
 }

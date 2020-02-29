@@ -21,7 +21,10 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers
+    {
+        login as protected traitlogin;
+    }
 
     /**
      * Where to redirect users after login.
@@ -42,6 +45,10 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        if(!$request->wantsJson()){
+            return $this->traitlogin($request);
+        }
+
         $this->validateLogin($request);
 
         if ($this->attemptLogin($request)) {
