@@ -1,6 +1,6 @@
-window.$ = window.jQuery = require('jquery')
+window.$ = window.jQuery = require('jquery');
 require('selectize');
-var bootstrap = require('bootstrap-sass');
+require('bootstrap');
 
 $( document ).ready(function() {
     $('#tags').selectize({
@@ -15,5 +15,9 @@ $( document ).ready(function() {
                 tag: input
             }
         }
-    });
+    });    
+});
+
+$(document).ready(function() {
+    $(".dropdown-toggle").dropdown();
 });

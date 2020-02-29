@@ -31,7 +31,7 @@
                 </td>
                 <td scope="col">{{ $cliente->created_at ? $cliente->created_at : '--' }}</td>
                 <td>
-                  <form method="post" action="{{ Route('admin.cliente.alteraView', $cliente->id) }}">
+                  <form method="post" action="{{ Route('admin.cliente.registerView.altera', $cliente->id) }}">
                     @csrf
                     <button class="btn btn-primary"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                   </form>

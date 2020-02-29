@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function() {
 	// Retorna view de registro.
 	Route::get('/admin/cliente/register', 'ClienteController@clientRegisterView')->name('admin.cliente.registerView');
 	// Retorna view de alterar cliente. Dados do cliente passados por POST.
-	Route::post('/admin/cliente/register/{id}', 'ClienteController@clientRegisterView')->name('admin.cliente.alteraView');
+	Route::post('/admin/cliente/register/{id}', 'ClienteController@clientRegisterView')->name('admin.cliente.registerView.altera');
 
 	/*
 	 * Rotas que usam os métodos da API internamente

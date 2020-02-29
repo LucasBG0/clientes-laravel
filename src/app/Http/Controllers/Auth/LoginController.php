@@ -24,6 +24,7 @@ class LoginController extends Controller
     use AuthenticatesUsers
     {
         login as protected traitlogin;
+        logout as protected traitlogout;
     }
 
     /**
@@ -64,14 +65,17 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request)
-    {
+    {       
         $user = Auth::guard('api')->user();
 
         if ($user) {
             $user->api_token = null;
             $user->save();
         }
-
+        
+        if(!$request->wantsJson()){
+            return $this->traitlogout($request);
+        } 
         return response()->json(['data' => 'User logged out.'], 200);
     }       
 }
