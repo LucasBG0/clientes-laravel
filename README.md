@@ -76,6 +76,17 @@ Existem duas formas de se utilizar o token:
 	}
 
 
+#### Logout de usuário
+
+	curl -X POST http://localhost/api/logout \
+	  -H "Authorization: Bearer <api_token>"
+
+
+##### Retorno:
+
+	{
+	    "data": "User logged out."
+	}
 
 #### Todos os clientes
 
@@ -371,6 +382,11 @@ A aplicação foi conteinerizada a partir de containers do Docker. Serão criado
 4. Acesse o url da aplicação: 
 
 	* http://127.0.0.1
+
+## Suíte de Testes - PHPunit
+É possível executar a suíte de testes implementada em `tests/Feature` com o composer, utilizando o seguinte comando:
+	
+	`composer test`
 
 # Docker
 Relação de comandos mais usados no docker

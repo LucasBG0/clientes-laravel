@@ -11,7 +11,7 @@ class ClienteController extends Controller
 
     public function clientView(Request $request)
     {
-        $clientes = $this->apiRequest('GET', '/api/clientes'); // requisição GET para a API - api/clientes
+        $clientes = $this->apiRequest('GET', '/api/clientes?limit=1000'); // requisição GET para a API - api/clientes
     	$msg = $this->session_flash($request);    		
         return view('clientes.lista', compact('clientes', 'msg'));
     }
