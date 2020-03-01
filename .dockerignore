@@ -23,7 +23,6 @@ src/vendor/**/Tests*
 ?untfile.js
 package.json
 phpunit.xml
-readme.md
 phpspec.yml
 
 Dockerfile

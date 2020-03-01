@@ -2,7 +2,7 @@ FROM php:7.4.3-fpm
 
 # Copy composer.lock and composer.json
 #COPY src/composer.lock src/composer.json /var/www/
-COPY README.md src/resources/views/README.md
+COPY /README.md src/resources/views/README.md
 
 # Set working directory
 WORKDIR /var/www
