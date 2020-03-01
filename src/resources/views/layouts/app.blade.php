@@ -17,8 +17,8 @@
 </head>
 <body>
     <div id="wrapper">
-        @guest
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        @if (Route::is('doc') || Route::is('login') || Route::is('register'))
+        <nav class="navbar navbar-fixed-top navbar-expand-md navbar-light bg-white shadow-sm mb-5">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -30,7 +30,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li>
+                            <a href="{{ Route('doc') }}">
+                                <span class="glyphicon glyphicon-book mr-2" aria-hidden="true"></span>Documentação
+                            </a>                             
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -69,7 +73,7 @@
             </div>
         </nav>
         @endif
-       @yield('content')     
+        @yield('content')
     </div>
 </body>
 </html>

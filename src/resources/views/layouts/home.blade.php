@@ -36,7 +36,11 @@
             <a href="{{ Route('admin.user.listView') }}" 
                 class="list-group-item list-group-item-action {{ strpos(Route::currentRouteName(), 'admin.user') !== false ? 'active btn-'.Config::get('theme_color') : '' }}">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>Usuários
-            </a>   
+            </a>
+            <a href="{{ Route('admin.doc') }}" 
+                class="list-group-item list-group-item-action {{ strpos(Route::currentRouteName(), 'admin.doc') !== false ? 'active btn-'.Config::get('theme_color') : '' }}">
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span>Documentação
+            </a>               
           </div>
         </div>           
         <!-- /#sidebar-wrapper -->
