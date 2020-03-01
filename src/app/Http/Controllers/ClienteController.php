@@ -4,23 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cliente;
+use App\Repositories\Methods;
 use GuzzleHttp\Client as ApiRequest;
 
 class ClienteController extends Controller
 {
-
-    public function clientView(Request $request)
+    public function view(Request $request)
     {
         $clientes = $this->apiRequest('GET', '/api/clientes?limit=1000'); // requisição GET para a API - api/clientes
-    	$msg = $this->session_flash($request);    		
+    	$msg = Methods::session_flash($request);
         return view('clientes.lista', compact('clientes', 'msg'));
     }
 
     // Método utilizado para retornar a view no registro e na alteração de um cliente
-    public function clientRegisterView(Request $request)
+    public function registerView(Request $request)
     {
     	$variables = array();
-    	$msg = $this->session_flash($request);
+    	$msg = Methods::session_flash($request);
 
     	// se id == true então altera o cliente
     	if ($request->id) {

@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+# Classes for register overide method
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -78,5 +80,18 @@ class RegisterController extends Controller
         if($request->wantsJson()){
             return response()->json(['data' => $user->toArray()], 201);
         }
-    }    
+        if ($request->is('api/register')) {
+            $this->redirectTo = 'admin/user/register?email='.$request->email;
+        }
+    }     
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        return view('auth.register', ['extends' => 'layouts.app', 'section' => 'content', 'route' => 'register']);
+    }      
 }
