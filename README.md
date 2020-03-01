@@ -7,6 +7,11 @@ O sistema conta com uma API para realizar os CRUDS.
 A API segue o protocolo Rest de comunicação, onde é possível realizar uma comunicação com o servidor para obter, incluir ou remover os dados do banco. 
 A API disponibiliza de endpoints para se registrar, login e logout. Além dos enpoints para realizar operações de CRUD de clientes.
 
+**Obs.:** Ao utilizar a API, envie sempre os cabeçalhos obrigatórios:
+
+	"Accept: application/json
+	"Content-Type: application/json"
+
 ### Autenticação
 A autenticação da API é feita com base no modelo oAuth2, através do uso de um token gerado para usuários logados.
 Então para conseguir o token, é necessário se registrar. É possível se registrar utilizando a própria API, enviando uma requisição do tipo POST. Mais detalhes na seção 'Endpoints'.
