@@ -73,9 +73,6 @@ class APIController extends Controller
     	if ($request->tags) {
     		//Deleta as tags atuais e salva as novas tags
     		$cliente->retag(explode(',', $request->tags));
-    	}else{
-    		// se estiver vazio, remove todas as tags do cliente
-    		$cliente->untag();
     	}
 
         $cliente = $cliente->with('tagged')->find($cliente->id);
